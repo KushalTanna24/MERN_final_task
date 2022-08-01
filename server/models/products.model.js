@@ -21,8 +21,7 @@ const productSchema = new mongoose.Schema({
     min: 0,
   },
   images: {
-    type: Array,
-    default: [],
+    type: String,
   },
   createdAt: {
     type: Date,
@@ -40,7 +39,6 @@ const validateProduct = (product) => {
     name: Joi.string().min(3).max(60).required(),
     description: Joi.string().min(3).max(1000).required(),
     price: Joi.number().min(0),
-    images: Joi.array(),
   });
   return schema.validate(product);
 };

@@ -2,9 +2,15 @@ const express = require("express");
 const { default: mongoose } = require("mongoose");
 const category = require("./routes/category.router");
 const products = require("./routes/products.router");
+const cors = require("cors");
 const app = express();
 
 // middlewares
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 app.use("/category", category);
 app.use("/products", products);

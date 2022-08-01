@@ -1,0 +1,29 @@
+Create CRUD Apis for categories and products -
+
+CATEGORIES -
+    _id
+    name
+    parent
+    createdAt
+    updatedAt
+
+Products
+    _id
+    categoryId
+    name
+    descriptionk/k/ko
+    price
+    images
+    createdAt
+    updatedAt
+
+In ReactJS, create pages for Category and Products
+Create Listing of Categories & SubCategories
+Create Listing of Products
+Create Add/Edit and Delete functionality to manage Categories
+Create Add/Edit and Delete functionality to manage Products
+
+NOTE:
+    On Delete, it should ask for confirmation.
+    On Add / Update, it should show toaster message if the request is sucess or fail.
+    On Add / Update, it should validate fields

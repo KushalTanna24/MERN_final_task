@@ -30,7 +30,7 @@ const validateCategory = (category) => {
   return schema.validate(category);
 };
 
-const Category = mongoose.model("Category", categorySchema);
+const Category = mongoose.model("category", categorySchema);
 
 exports.validateCategory = validateCategory;
 exports.Category = Category;

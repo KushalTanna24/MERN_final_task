@@ -1,25 +1,16 @@
-import { Fragment } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Container from "./components/Container";
-import AddBtn from "./components/AddBtn";
-import Form from "./components/Form";
+import Form from "./components/Crud/Form";
+import List from "./components/List/List";
 
 function App() {
   return (
-    <Fragment>
-      <AddBtn />
-
-      <br />
-      <br />
-      <br />
-
-      <Container />
-
-      <br />
-      <br />
-
-      <Form />
-    </Fragment>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<List />} />
+        <Route path="/form" element={<Form />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

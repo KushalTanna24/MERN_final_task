@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Product, validateProduct } = require("../models/products.model");
+const upload = require("../middleware/upload");
 
 router.get("/", async (req, res) => {
   Product.aggregate([
@@ -44,8 +45,10 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     price: req.body.price,
-    images: req.body.images,
   });
+  if (req.file) {
+    product.images = req.file.path;
+  }
   const result = await product.save();
   if (!result) {
     return res.status(400).send("Product not saved");
