@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AddBtn from "../UI/AddBtn";
+import AddBtn from "../UI_edit/AddBtn";
 import CatMap from "./CatMap";
 import ProdMap from "./ProdMap";
 
@@ -12,6 +12,7 @@ const List = () => {
   return (
     <>
       <AddBtn listener={clickedBtn} />
+
       <br />
 
       {clickListener === "product" ? <ProdMap /> : <CatMap />}

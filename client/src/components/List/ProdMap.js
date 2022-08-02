@@ -1,5 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
 
 const ProdMap = () => {
   const [products, setProducts] = useState([]);
@@ -39,47 +40,63 @@ const ProdMap = () => {
 
   const productMap = products.map((product) => {
     return (
-      <>
-        {/* carousel */}
-        <div className="card" style={{ width: "18rem", margin: "10px" }}>
-          <img
-            src={product.image}
-            className="card-img-top"
-            alt="..."
-            style={{ height: "200px" }}
-          />
-          <div className="card-body">
-            <h5 className="card-title">{product.name}</h5>
-            <p className="card-text">{product.description}</p>
-            <p className="card-text">
-              <small className="text-muted">
-                category: {product.categoryId[0].name}
-              </small>
-              <br />
-              <small className="text-muted">
-                Created at: {product.createdAt.slice(0, 10)}
-              </small>
-              <br />
-              <small className="text-muted">
-                Updated at: {product.updatedAt.slice(0, 10)}
-              </small>
-            </p>
-            <div
-              className="btn-group"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
+      <div
+        className="card"
+        style={{ width: "18rem", margin: "10px" }}
+        key={product.createdAt}
+      >
+        <img
+          // src random image
+          src="https://picsum.photos/400"
+          className="card-img-top"
+          alt="..."
+          style={{
+            objectFit: "cover",
+            height: "200px",
+            width: "100%",
+          }}
+        />
+
+        <div className="card-body">
+          <h5 className="card-title">{product.name}</h5>
+          {/* price */}
+          <p className="card-text">
+            <small>{product.price} ₹</small>
+          </p>
+          <p className="card-text">{product.description.slice(0, 100)} ...</p>
+          <p className="card-text">
+            <small className="text-muted">
+              category: {product.categoryId[0].name}
+            </small>
+            <br />
+            <small className="text-muted">
+              Created at: {product.createdAt.slice(0, 10)}
+            </small>
+            <br />
+            <small className="text-muted">
+              Updated at:
+              {product.updatedAt === null
+                ? " - "
+                : product.updatedAt.slice(0, 10)}
+            </small>
+          </p>
+          <div
+            className="btn-group"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Link to={`/edit/prod`} state={{ product }}>
               <button
                 type="button"
                 className="btn btn-outline-primary"
-                onClick={() => {
-                  console.log("edit");
-                }}
+                onClick={() => {}}
               >
                 Edit
               </button>
+            </Link>
+            <Link to={"/"}>
               <button
                 type="button"
                 className="btn btn-outline-danger"
@@ -90,10 +107,10 @@ const ProdMap = () => {
               >
                 Delete
               </button>
-            </div>
+            </Link>
           </div>
         </div>
-      </>
+      </div>
     );
   });
 

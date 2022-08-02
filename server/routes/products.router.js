@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { Product, validateProduct } = require("../models/products.model");
-const upload = require("../middleware/upload");
 
 router.get("/", async (req, res) => {
   Product.aggregate([
@@ -42,13 +41,13 @@ router.post("/", async (req, res) => {
   }
   const product = new Product({
     categoryId: req.body.categoryId,
+    subCategoryId: req.body.subCategoryId,
     name: req.body.name,
     description: req.body.description,
     price: req.body.price,
+    createdAt: Date.now(),
+    updatedAt: null,
   });
-  if (req.file) {
-    product.images = req.file.path;
-  }
   const result = await product.save();
   if (!result) {
     return res.status(400).send("Product not saved");
@@ -73,10 +72,12 @@ router.put("/:id", async (req, res) => {
     req.params.id,
     {
       categoryId: req.body.categoryId,
+      subCategoryId: req.body.subCategoryId,
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
       images: req.body.images,
+      updatedAt: Date.now(),
     },
     { new: true }
   );

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 
 const CatForm = () => {
   const [name, setName] = useState("");
-  const [parent, setParent] = useState(null);
+  const [parent, setParent] = useState(undefined);
   const [fetchPId, setFetchPId] = useState([]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (name.trim() === "") {
+      resetHandler();
+      return alert("Empty name cannot be added please try again");
+    }
     const response = await fetch("http://localhost:5000/category", {
       method: "POST",
       headers: {
@@ -65,11 +69,15 @@ const CatForm = () => {
           <option value="" hidden>
             Select Parent category
           </option>
-          {fetchPId.map((item) => (
-            <option key={item._id} value={item._id}>
-              {item.name}
-            </option>
-          ))}
+          {fetchPId.map(
+            (item) =>
+              item.parent === null && 
+              (
+                <option key={item._id} value={item._id}>
+                  {item.name}
+                </option>
+              )
+          )}
         </select>
       </div>
       <button

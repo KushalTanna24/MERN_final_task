@@ -6,6 +6,11 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
+  subCategoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    default: null,
+  },
   name: {
     type: String,
     minlength: 3,
@@ -36,6 +41,7 @@ const productSchema = new mongoose.Schema({
 const validateProduct = (product) => {
   const schema = Joi.object({
     categoryId: Joi.string().required(),
+    subCategoryId: Joi.string().optional(),
     name: Joi.string().min(3).max(60).required(),
     description: Joi.string().min(3).max(1000).required(),
     price: Joi.number().min(0),

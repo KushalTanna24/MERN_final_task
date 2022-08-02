@@ -1,22 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ProdForm = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  // const [images, setImages] = useState([]);
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
-  const [subCategoru, setSubCategoru] = useState("");
-  const [toggle, setToggle] = useState("product");
+  const [categoryId, setCategoryId] = useState("");
+  const [subCategoryId, setSubCategoryId] = useState("");
+  const [fetchPId, setFetchPId] = useState([]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost:5000/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        description,
+        price,
+        categoryId,
+        subCategoryId,
+      }),
+    });
+    if (response.ok) {
+      console.log("success");
+      alert("Added");
+      window.location.reload();
+    } else {
+      console.log(response.error);
+      alert("error");
+    }
+  };
+
+  const resetHandler = () => {
+    setName("");
+    setDescription("");
+
+    setPrice("");
+    setCategoryId("");
+    setSubCategoryId("");
+  };
+
+  useEffect(() => {
+    fetch("http://localhost:5000/category")
+      .then((res) => res.json())
+      .then((data) => {
+        setFetchPId(data);
+      });
+  }, []);
 
   return (
-    <form style={{ width: "60%", margin: "auto" }}>
+    <form style={{ width: "60%", margin: "auto" }} onSubmit={submitHandler}>
       <div autoComplete="off" className="form-group">
         <label htmlFor="name">Name</label>
         <input
           type="text"
           className="form-control"
           id="name"
+          value={name}
           placeholder="Enter name"
           onChange={(e) => setName(e.target.value)}
           required
@@ -30,6 +74,7 @@ const ProdForm = () => {
           id="description"
           rows="3"
           placeholder="Enter description"
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
@@ -40,7 +85,8 @@ const ProdForm = () => {
         <input
           type="number"
           min={0}
-          max={10000}
+          max={100000000}
+          value={price}
           className="form-control"
           id="price"
           placeholder="Enter price"
@@ -55,16 +101,21 @@ const ProdForm = () => {
           className="form-select"
           id="category"
           onChange={(e) => {
-            setCategory(e.target.value);
+            setCategoryId(e.target.value);
           }}
           defaultValue=""
         >
           <option value="" disabled>
             Select Category
           </option>
-          <option value="Kushal">Kushal</option>
-          <option value="C">Sujal</option>
-          <option value="D">Bro</option>
+          {fetchPId.map(
+            (item) =>
+              item.parent === null && (
+                <option key={item._id} value={item._id}>
+                  {item.name}
+                </option>
+              )
+          )}
         </select>
 
         <label htmlFor="category">Sub-category</label>
@@ -73,15 +124,20 @@ const ProdForm = () => {
           id="subCategory"
           defaultValue=""
           onChange={(e) => {
-            setSubCategoru(e.target.value);
+            setSubCategoryId(e.target.value);
           }}
         >
           <option value="" disabled>
             Select Sub Category
           </option>
-          <option value="Kushal">Kushal</option>
-          <option value="C">Sujal</option>
-          <option value="D">Bro</option>
+          {fetchPId.map(
+            (item) =>
+              item.parent !== null && (
+                <option key={item._id} value={item._id}>
+                  {item.name}
+                </option>
+              )
+          )}
         </select>
       </div>
       <div className="form-group">
@@ -102,10 +158,10 @@ const ProdForm = () => {
       </button>
 
       <button
-        type="submit"
+        type="button"
         className="btn btn-outline-danger"
         style={{ margin: "20px 10px" }}
-        onClick={() => {}}
+        onClick={resetHandler}
       >
         Cancel
       </button>
@@ -114,3 +170,24 @@ const ProdForm = () => {
 };
 
 export default ProdForm;
+
+// {
+//   "_id": "62e8ee9354ba0708df9fedc5",
+//   "categoryId": [
+//       {
+//           "_id": "62e8be0122aec099f3a8850a",
+//           "name": "Mobile",
+//           "parent": null,
+//           "createdAt": "2022-08-02T06:02:41.333Z",
+//           "updatedAt": null,
+//           "__v": 0
+//       }
+//   ],
+//   "subCategoryId": "62e8be0722aec099f3a88510",
+//   "name": "iphone 69",
+//   "description": "lolololol",
+//   "price": 69420,
+//   "createdAt": "2022-08-02T09:29:55.722Z",
+//   "updatedAt": null,
+//   "__v": 0
+// }
