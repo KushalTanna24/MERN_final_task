@@ -1,6 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const { Product, validateProduct } = require("../models/products.model");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now() + file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   Product.aggregate([
@@ -34,7 +45,7 @@ router.get("/:id", async (req, res) => {
   });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", upload.single("images"), async (req, res) => {
   const { error } = validateProduct(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -48,6 +59,9 @@ router.post("/", async (req, res) => {
     createdAt: Date.now(),
     updatedAt: null,
   });
+  if (req.file) {
+    product.images = req.file.filename;
+  }
   const result = await product.save();
   if (!result) {
     return res.status(400).send("Product not saved");

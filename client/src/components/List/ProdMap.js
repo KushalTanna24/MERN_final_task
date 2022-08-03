@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const ProdMap = () => {
   const [products, setProducts] = useState([]);
+  console.log(products);
 
   const fetchHandler = useCallback(async function () {
     try {
@@ -14,6 +15,8 @@ const ProdMap = () => {
     } catch (error) {
       console.log(error);
     }
+
+    // console.log(`${__dirname}server/uploads/${products[0].images}`);
   }, []);
 
   const deleteHandler = async (e) => {
@@ -39,6 +42,9 @@ const ProdMap = () => {
   }, [fetchHandler]);
 
   const productMap = products.map((product) => {
+    console.log(product.images);
+    // console.log(product);
+    // console.log(`"../../../../server/uploads/${product.images}"`);
     return (
       <div
         className="card"
@@ -46,8 +52,7 @@ const ProdMap = () => {
         key={product.createdAt}
       >
         <img
-          // src random image
-          src="https://picsum.photos/400"
+          src={`http://localhost:5000/${product.images}`}
           className="card-img-top"
           alt="..."
           style={{

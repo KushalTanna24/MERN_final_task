@@ -3,35 +3,36 @@ import React, { useEffect, useState } from "react";
 const ProdForm = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  // const [images, setImages] = useState([]);
   const [price, setPrice] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [subCategoryId, setSubCategoryId] = useState("");
   const [fetchPId, setFetchPId] = useState([]);
+  const [images, setImages] = useState(null);
 
   const submitHandler = async (e) => {
+    console.log(images);
     e.preventDefault();
+    if (images === null || images === undefined) {
+      return alert("Please upload an image");
+    }
+    const data = new FormData();
+    data.append("name", name);
+    data.append("description", description);
+    data.append("price", price);
+    data.append("categoryId", categoryId);
+    data.append("subCategoryId", subCategoryId);
+    data.append("images", images);
 
     const response = await fetch("http://localhost:5000/products", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        price,
-        categoryId,
-        subCategoryId,
-      }),
+      body: data,
     });
     if (response.ok) {
-      console.log("success");
-      alert("Added");
+      alert("Product added");
       window.location.reload();
     } else {
-      console.log(response.error);
-      alert("error");
+      alert("Error");
+      console.log(response);
     }
   };
 
@@ -53,7 +54,11 @@ const ProdForm = () => {
   }, []);
 
   return (
-    <form style={{ width: "60%", margin: "auto" }} onSubmit={submitHandler}>
+    <form
+      style={{ width: "60%", margin: "auto" }}
+      onSubmit={submitHandler}
+      encType="multipart/form-data"
+    >
       <div autoComplete="off" className="form-group">
         <label htmlFor="name">Name</label>
         <input
@@ -145,8 +150,12 @@ const ProdForm = () => {
         <input
           className="form-control"
           type="file"
+          name="images"
           id="formFileMultiple"
-          multiple
+          // multiple
+          onChange={(e) => {
+            setImages(e.target.files[0]);
+          }}
         />
       </div>
       <button

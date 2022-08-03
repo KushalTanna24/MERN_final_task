@@ -14,8 +14,7 @@ app.use(
 app.use(express.json());
 app.use("/category", category);
 app.use("/products", products);
-app.use(express.static("./public"));
-
+app.use(express.static("public"));
 // db connection
 mongoose
   .connect("mongodb://localhost/MERN")
